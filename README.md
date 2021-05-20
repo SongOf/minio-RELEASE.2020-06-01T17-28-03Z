@@ -1,3 +1,7 @@
+#使用
+MINIO_ACCESS_KEY=key;MINIO_SECRET_KEY=secret
+server H:/data1 H:/data2 H:/data3 H:/data4 H:/data5 H:/data6 H:/data7 H:/data8
+
 # MinIO Quickstart Guide
 [![Slack](https://slack.min.io/slack?type=svg)](https://slack.min.io) [![Docker Pulls](https://img.shields.io/docker/pulls/minio/minio.svg?maxAge=604800)](https://hub.docker.com/r/minio/minio/)
 
