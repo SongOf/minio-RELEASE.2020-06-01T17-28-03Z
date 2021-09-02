@@ -86,6 +86,8 @@ func TestReplicationDisk(t *testing.T) {
 	}
 	wg.Wait()
 }
+
+////go test -v -run TestECDisk
 func TestECDisk(t *testing.T) {
 	path := "/root/data/rdata.txt"
 	size := 1 //KB
@@ -179,23 +181,33 @@ func TestECDisk(t *testing.T) {
 		}
 	}
 }
+
 func TestCreateData(t *testing.T) {
-	data := make([]byte, 1024*1024*1024)
-	if _, err := io.ReadFull(rand.Reader, data); err != nil {
-		t.Fatalf("Failed to read random data: %v", err)
-	}
-	path := "/Users/lisongsong/Documents/rdata.txt"
-	fi, err := os.Create(path)
-	if err != nil {
-		panic(err)
-	}
-	defer fi.Close()
-	_, err = fi.Write(data)
-	if err != nil {
-		log.Println("writeFile error ..err =", err)
-		return
+	sizeArrays := []int{1, 100, 300, 512, 700, 900, 1024, 1024 * 5, 1024 * 10, 1024 * 20, 1024 * 40, 1024 * 80, 1024 * 160, 1024 * 320, 1024 * 640}
+	for i := 0; i < len(sizeArrays); i++ {
+		data := make([]byte, sizeArrays[i]*1024)
+		if _, err := io.ReadFull(rand.Reader, data); err != nil {
+			t.Fatalf("Failed to read random data: %v", err)
+		}
+		path := ""
+		if sizeArrays[i] < 1024 {
+			path = "/Users/lisongsong/Documents/" + strconv.Itoa(sizeArrays[i]) + "KB.txt"
+		} else {
+			path = "/Users/lisongsong/Documents/" + strconv.Itoa(sizeArrays[i]/1024) + "MB.txt"
+		}
+		fi, err := os.Create(path)
+		if err != nil {
+			panic(err)
+		}
+		defer fi.Close()
+		_, err = fi.Write(data)
+		if err != nil {
+			log.Println("writeFile error ..err =", err)
+			return
+		}
 	}
 }
+
 func TestErasureEncodeDecode(t *testing.T) {
 	data := make([]byte, 1024*1024)
 	if _, err := io.ReadFull(rand.Reader, data); err != nil {
