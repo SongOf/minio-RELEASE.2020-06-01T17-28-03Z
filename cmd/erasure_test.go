@@ -47,7 +47,7 @@ var erasureEncodeDecodeTests = []struct {
 }
 
 func TestReplicationDisk(t *testing.T) {
-	path := "/Users/lisongsong/Documents/rdata.txt"
+	path := "/root/data/rdata.txt"
 	size := 1 //KB
 	data := make([]byte, 0)
 	fi, err := os.Open(path)
@@ -87,7 +87,7 @@ func TestReplicationDisk(t *testing.T) {
 	wg.Wait()
 }
 func TestECDisk(t *testing.T) {
-	path := "/Users/lisongsong/Documents/rdata.txt"
+	path := "/root/data/rdata.txt"
 	size := 1 //KB
 	data := make([]byte, 0)
 	fi, err := os.Open(path)
