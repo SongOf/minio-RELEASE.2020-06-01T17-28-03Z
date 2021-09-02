@@ -24,6 +24,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"sync"
 	"testing"
 )
 
@@ -54,30 +55,36 @@ func TestReplicationDisk(t *testing.T) {
 		panic(err)
 	}
 	defer fi.Close()
-	for i := 0; i < 3; i++ {
-		for i := 0; i < size; i++ {
-			buf := make([]byte, 1024) //每次需要再for循环里面重新make，踩坑
-			n, err := fi.Read(buf)
-			if err != nil && err != io.EOF {
-				panic(err)
-			}
-			if 0 == n {
-				break
-			}
-			data = append(data, buf...)
+	for i := 0; i < size; i++ {
+		buf := make([]byte, 1024) //每次需要再for循环里面重新make，踩坑
+		n, err := fi.Read(buf)
+		if err != nil && err != io.EOF {
+			panic(err)
 		}
-		newPath := path + "-" + strconv.Itoa(i)
-		f, err := os.Create(newPath)
-		defer f.Close()
-		if err != nil {
-			t.Fatalf("Test %d: failed to create erasure: %v", i, err)
+		if 0 == n {
+			break
 		}
-		_, err = f.Write(data)
-		if err != nil {
-			log.Println("writeFile error ..err =", err)
-			return
-		}
+		data = append(data, buf...)
 	}
+	wg := sync.WaitGroup{}
+	wg.Add(3)
+	for i := 0; i < 3; i++ {
+		go func() {
+			newPath := path + "-" + strconv.Itoa(i)
+			f, err := os.Create(newPath)
+			defer f.Close()
+			if err != nil {
+				t.Fatalf("Test %d: failed to create erasure: %v", i, err)
+			}
+			_, err = f.Write(data)
+			if err != nil {
+				log.Println("writeFile error ..err =", err)
+				return
+			}
+			defer wg.Done()
+		}()
+	}
+	wg.Wait()
 }
 func TestECDisk(t *testing.T) {
 	path := "/Users/lisongsong/Documents/rdata.txt"
