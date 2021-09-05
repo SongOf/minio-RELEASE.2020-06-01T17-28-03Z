@@ -6,9 +6,9 @@ metadata:
 type: Opaque
 data:
   ## Access Key for MinIO Tenant, base64 encoded (echo -n 'minio' | base64)
-  accesskey: songof
+  accesskey: c29uZ29m
   ## Secret Key for MinIO Tenant, base64 encoded (echo -n 'minio123' | base64)
-  secretkey: 022012bupt
+  secretkey: MDIyMDEyYnVwdA==
 ---
 ## MinIO Tenant Definition
 apiVersion: minio.min.io/v2
