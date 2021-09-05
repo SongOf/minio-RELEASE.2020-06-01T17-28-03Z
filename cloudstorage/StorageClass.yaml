@@ -1,0 +1,9 @@
+#先创建StorageClass
+#再创建PV
+#再创建PVC
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: cloud-local-storage
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
